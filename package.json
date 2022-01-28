@@ -1,0 +1,18 @@
+{
+  "name": "the-piper",
+  "version": "1.0.0",
+  "description": "Test for Scuffle Bot",
+  "main": "bot.js",
+  "author": "Patrick Tuohy",
+  "dependencies": {
+    "cross-fetch": "^3.1.5",
+    "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+    "ejs": "^3.1.5",
+    "express": "^4.15.2",
+    "winston": "^3.4.0"
+  },
+  "devDependencies": {
+    "got": "^11.3.0",
+    "tape": "^4.7.0"
+  }
+}
