@@ -6,3 +6,10 @@ script:
 better check and remove from toplist
 better search through for random 3 cards
 combine card images into one image output
+
+commands:
+RUN LOCALLY -> node bot.js
+CHECK HEROKU LOGS -> heroku logs --tail
+COMMIT TO HEROKU -> git add .
+                    git commit -m"<message here>"
+                    git push heroku main

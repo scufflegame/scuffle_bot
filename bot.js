@@ -128,9 +128,9 @@ function filter_toplist(i_cards, i_toplist) {
   console.log("filter_toplist: started");
   console.log(Object.keys(i_cards).length);
   for (let i = Object.keys(i_cards).length - 1; i > -1; i--) {
-    // console.log(i);
+    // console.log(i, i_cards[i].name);
     if (i_toplist.search(i_cards[i].name) != -1) {
-      // console.log(i_cards[i].name);
+      // console.log(i ,i_cards[i].name);
       console.log(i_cards[i].name + " removed");
       i_cards.splice(i, 1);
     }  // could add up valid cards into key numbers for random laater
@@ -153,7 +153,7 @@ function randomly_select(cards, output_size) {
   console.log(selected_cards);
   return selected_cards;
 
-  // return cards(rand_int_array); //find 3 from array into array
+   return cards(rand_int_array); //find 3 from array into array
 }
 
 function generate_rand_int_array(rand_max, output_num) {
@@ -175,13 +175,21 @@ function generate_rand_int_array(rand_max, output_num) {
 function form_message(selected_cards) {
   var output_string = selected_cards[0].name;
   for (let i = 1; i < selected_cards.length; i++) {
-    output_string += " // " + selected_cards[i].name;
+    output_string += " - " + selected_cards[i].name;
   }
   return output_string;
 }
 
 function form_image(selected_cards) {
 
+}
+
+function get_card_front(card) {
+  if ("card_faces" in card && card.layout != "flip") {
+    return card.card_faces[0].image_uris.normal;
+  } else {
+    return card.image_uris.normal;
+  }
 }
 
 bot.on('message', async function(user, userID, channelID, message, evt) {
@@ -204,26 +212,24 @@ if (message.substring(0, 1) == '!') {
 
             cards = filter_toplist(cards, toplist);
 
-            console.log("papa! cards:");
-            for (let i = 0; i < cards.length; i++) {
-              console.log(cards[i].name);
-              if (i > 1000) {
-                break;
-              }
-            }
+            // console.log("papa! cards:");
+            // for (let i = 0; i < cards.length; i++) {
+            //   console.log(cards[i].name);
+            //   if (i > 1000) {
+            //     break;
+            //   }
+            // }
 
             var selected_cards = randomly_select(cards, 3);
 
             console.log("papa! selected cards:");
             console.log(typeof(selected_cards));
             console.log(selected_cards[0].name);
-            console.log(selected_cards[1].name);
-            console.log(selected_cards[2].name);
 
             var output_message = form_message(selected_cards);
 
             for (let i = 0; i < selected_cards.length; i++) {
-              bot.sendMessage({to:channelID, message: selected_cards[i].image_uris.normal});
+              bot.sendMessage({to:channelID, message: get_card_front(selected_cards[i])});
             }
             bot.sendMessage({to:channelID, message: output_message})
         break;
