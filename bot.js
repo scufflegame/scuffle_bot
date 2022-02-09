@@ -12,22 +12,30 @@ const PORT = process.env.PORT || 5000
 
 express()
   .use(express.static(path.join(__dirname, 'public')))
-  .set('views', path.join(__dirname, 'views'))
-  .set('view engine', 'ejs')
-  .get('/', (req, res) => res.render('pages/index'))
+  // .set('views', path.join(__dirname, 'views'))
+  // .set('view engine', 'ejs')
+  // .get('/', (req, res) => res.render('pages/index'))
   .listen(PORT, () => console.log(`Listening on ${ PORT }`))
 
 // Configure logger settings
+
+console.log('x');
 
 logger.remove(logger.transports.Console);
 logger.add(new logger.transports.Console, {colorize: true});
 logger.level = 'debug';
 
+console.log('x');
+
 // Initialize Discord Bot
 
 var bot = new Discord.Client({token: auth.token, autorun: true});
 
+console.log('x');
+
 bot.on('ready', function (evt) {
+
+  console.log('x');
 
 logger.info('Connected');
 logger.info('Logged in as: ');
@@ -86,22 +94,12 @@ const fetch_card_pool = async(i_search_str) => {
   // logger.info("fetch_card_pool: while: started");
   while (has_more && i < 6) {
     if (page_json.has_more) {
-      // page_json = await url2json_a(page_json.next_page);
       page_json = await url2json_async(page_json.next_page, false);
-      // console.log(page_json); //bigprint
-
-      // logger.info("typeof(page_json.data) 3: " + typeof(page_json.data).toString());
-      // logger.info("typeof(cards) 4: " + typeof(cards).toString());
       cards = cards.concat(page_json.data);
-      // if (i == 0) {
-      //   cards = json_join(cards, page_json.data);
-      // }
-      // logger.info("typeof(cards) 5: " + typeof(cards).toString());
-      // }
+
     } else {
       has_more = false;
     }
-    // logger.info("fetch_card_pool: while("+i+"): closed");
     i++;
   }
 
@@ -110,33 +108,16 @@ const fetch_card_pool = async(i_search_str) => {
   return cards;
 }
 
-function json_join(ja, jb) {
-  console.log("json_join: started");
-  var ja = ja.concat(jb);
-  console.log(typeof(ja));
-  console.log(typeof(jb));
-  // console.log(c);
-  console.log(ja.length);
-  console.log(jb.length);
-  // console.log(c.length);
-  // console.log(jb);
-  console.log("json_join: ----");
-  return ja;
-}
-
 function filter_toplist(i_cards, i_toplist) {
   console.log("filter_toplist: started");
-  console.log(Object.keys(i_cards).length);
+  console.log("num cards pre-removal:", Object.keys(i_cards).length);
   for (let i = Object.keys(i_cards).length - 1; i > -1; i--) {
-    // console.log(i, i_cards[i].name);
     if (i_toplist.search(i_cards[i].name) != -1) {
-      // console.log(i ,i_cards[i].name);
-      console.log(i_cards[i].name + " removed");
+      // console.log(i_cards[i].name + " removed");
       i_cards.splice(i, 1);
     }  // could add up valid cards into key numbers for random laater
   }
-  console.log("filter_toplist: ending")
-  console.log(Object.keys(i_cards).length);
+  console.log("num cards post-removal:", Object.keys(i_cards).length);
   return i_cards;
 }
 
@@ -150,10 +131,8 @@ function randomly_select(cards, output_size) {
     }
   }
   console.log("randomly_select: returning::");
-  console.log(selected_cards);
+  // console.log(selected_cards);
   return selected_cards;
-
-   return cards(rand_int_array); //find 3 from array into array
 }
 
 function generate_rand_int_array(rand_max, output_num) {
@@ -211,14 +190,6 @@ if (message.substring(0, 1) == '!') {
             var cards = await fetch_card_pool(search_str);
 
             cards = filter_toplist(cards, toplist);
-
-            // console.log("papa! cards:");
-            // for (let i = 0; i < cards.length; i++) {
-            //   console.log(cards[i].name);
-            //   if (i > 1000) {
-            //     break;
-            //   }
-            // }
 
             var selected_cards = randomly_select(cards, 3);
 
