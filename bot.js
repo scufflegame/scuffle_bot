@@ -194,8 +194,9 @@ if (message.substring(0, 1) == '!') {
             var selected_cards = randomly_select(cards, 3);
 
             console.log("papa! selected cards:");
-            console.log(typeof(selected_cards));
-            console.log(selected_cards[0].name);
+            for (let i = 0; i < selected_cards.length; i++) {
+              console.log(selected_cards[i].name);
+            }
 
             var output_message = form_message(selected_cards);
 
